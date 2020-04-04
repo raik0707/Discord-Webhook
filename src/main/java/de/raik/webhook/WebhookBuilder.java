@@ -2,7 +2,8 @@ package de.raik.webhook;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import de.raik.webhook.embeds.Embed;
+import de.raik.webhook.elements.AllowedMentions;
+import de.raik.webhook.elements.Embed;
 
 import java.util.ArrayList;
 
@@ -47,6 +48,11 @@ public class WebhookBuilder {
      * will contain
      */
     private ArrayList<Embed> embeds = new ArrayList<>();
+
+    /**
+     * The allowed mentions
+     */
+    private AllowedMentions allowedMentions;
 
     /**
      * Constructor which creates the
@@ -120,6 +126,17 @@ public class WebhookBuilder {
     }
 
     /**
+     * Setting the allowed mentions
+     *
+     * @param allowedMentions The allowed mentions it will be set to
+     * @return Itself to continuing modifying
+     */
+    public WebhookBuilder allowedMentions(AllowedMentions allowedMentions) {
+        this.allowedMentions = allowedMentions;
+        return this;
+    }
+
+    /**
      * Building the webhook
      * which was set up in this builder
      * Using JsonObject to create the payload
@@ -144,6 +161,9 @@ public class WebhookBuilder {
         this.embeds.forEach(embed -> embedArray.add(embed.exportJson()));
 
         payload.add("embeds", embedArray);
+
+        if (this.allowedMentions != null)
+            payload.add("allowed_mentions", this.allowedMentions.exportToJson());
 
         //Returning new webhook
         return new Webhook(this.url, payload);

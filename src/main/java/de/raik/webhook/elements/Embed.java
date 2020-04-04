@@ -1,4 +1,4 @@
-package de.raik.webhook.embeds;
+package de.raik.webhook.elements;
 
 import com.google.gson.JsonObject;
 
