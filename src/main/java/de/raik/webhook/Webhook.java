@@ -2,6 +2,12 @@ package de.raik.webhook;
 
 import com.google.gson.JsonObject;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+
 /**
  * Webhook class
  * presents executable webhook
@@ -35,5 +41,21 @@ public class Webhook {
     protected Webhook(String url, JsonObject json) {
         this.url = url;
         this.webhookJson = json;
+    }
+
+    public void execute() {
+        try {
+            HttpURLConnection httpConnection = (HttpURLConnection) new URL(this.url).openConnection();
+            httpConnection.setRequestMethod("POST");
+            httpConnection.setRequestProperty("Content-Type", "application/json; utf-8");
+            httpConnection.setDoOutput(true);
+
+            OutputStream outputStream = httpConnection.getOutputStream();
+            byte[] payloadBytes = this.webhookJson.toString().getBytes(StandardCharsets.UTF_8);
+            outputStream.write(payloadBytes, 0, payloadBytes.length);
+
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
     }
 }
