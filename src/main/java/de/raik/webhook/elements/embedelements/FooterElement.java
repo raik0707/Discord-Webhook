@@ -3,7 +3,7 @@ package de.raik.webhook.elements.embedelements;
 import com.google.gson.JsonObject;
 
 /**
- *  Footer element of webhook
+ *  Footer element of embed
  *
  * @author Raik
  * @version 1.0
