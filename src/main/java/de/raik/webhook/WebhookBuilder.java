@@ -158,7 +158,11 @@ public class WebhookBuilder {
         payload.addProperty("tts", this.tts);
 
         JsonArray embedArray = new JsonArray();
-        this.embeds.forEach(embed -> embedArray.add(embed.exportJson()));
+        this.embeds.forEach(embed -> {
+            JsonObject embedObject = embed.exportJson();
+            if (embedObject.size() > 0)
+                embedArray.add(embedObject);
+        });
 
         payload.add("embeds", embedArray);
 
