@@ -224,6 +224,8 @@ public class Embed {
         JsonArray fields = new JsonArray();
         this.embedFields.forEach(fieldElement -> fields.add(fieldElement.exportToJson()));
 
-        return new JsonObject();
+        embedObject.add("fields", fields);
+
+        return embedObject;
     }
 }

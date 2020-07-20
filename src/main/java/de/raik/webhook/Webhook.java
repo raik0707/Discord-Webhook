@@ -43,19 +43,26 @@ public class Webhook {
         this.webhookJson = json;
     }
 
-    public void execute() {
+    public HttpURLConnection execute() {
         try {
             HttpURLConnection httpConnection = (HttpURLConnection) new URL(this.url).openConnection();
-            httpConnection.setRequestMethod("POST");
-            httpConnection.setRequestProperty("Content-Type", "application/json; utf-8");
+            httpConnection.setRequestProperty("Content-Type", "application/json");
             httpConnection.setDoOutput(true);
+            httpConnection.setRequestMethod("POST");
 
             OutputStream outputStream = httpConnection.getOutputStream();
             byte[] payloadBytes = this.webhookJson.toString().getBytes(StandardCharsets.UTF_8);
             outputStream.write(payloadBytes, 0, payloadBytes.length);
+            outputStream.flush();
+            outputStream.close();
+
+            httpConnection.getInputStream();
+
+            return httpConnection;
 
         } catch (IOException exception) {
             exception.printStackTrace();
         }
+        return null;
     }
 }

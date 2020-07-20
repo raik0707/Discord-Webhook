@@ -6,8 +6,10 @@ group 'de.raik'
 version '1.0-SNAPSHOT'
 archivesBaseName = "Discord Webhook"
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+java {
+    sourceCompatibility = JavaVersion.VERSION_14
+    targetCompatibility = JavaVersion.VERSION_14
+}
 
 compileJava.options.encoding = "UTF-8"
 
@@ -16,7 +18,18 @@ repositories {
 }
 
 dependencies {
-    api 'com.google.code.gson:gson:2.8.6'
+    implementation 'com.google.code.gson:gson:2.8.6'
 
     testImplementation group: 'junit', name: 'junit', version: '4.12'
+}
+
+sourceSets {
+    test {
+        java.srcDir 'src/main/java'
+        resources.srcDir 'src/main/resources'
+    }
+}
+
+test {
+    useJUnit()
 }
