@@ -34,12 +34,12 @@ public class AllowedMentions {
     /**
      * The users which will be mentioned
      */
-    private HashSet<String> userSnowflakes = new HashSet<>();
+    private final HashSet<String> userSnowflakes = new HashSet<>();
 
     /**
      * The roles which will be mentioned
      */
-    private HashSet<String> roleSnowflakes = new HashSet<>();
+    private final HashSet<String> roleSnowflakes = new HashSet<>();
 
     /**
      * Activate mention parsing

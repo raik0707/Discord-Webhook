@@ -47,7 +47,7 @@ public class WebhookBuilder {
      * The embeds the message
      * will contain
      */
-    private ArrayList<Embed> embeds = new ArrayList<>();
+    private final ArrayList<Embed> embeds = new ArrayList<>();
 
     /**
      * The allowed mentions

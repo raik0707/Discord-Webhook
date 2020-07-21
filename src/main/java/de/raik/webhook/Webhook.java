@@ -43,6 +43,12 @@ public class Webhook {
         this.webhookJson = json;
     }
 
+    /**
+     * Executes the webhook
+     * with a post request
+     *
+     * @return The httpConnection of the request to use the result of the request
+     */
     public HttpURLConnection execute() {
         try {
             HttpURLConnection httpConnection = (HttpURLConnection) new URL(this.url).openConnection();

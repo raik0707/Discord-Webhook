@@ -47,12 +47,12 @@ public class Embed {
      * List of element which are set in
      * own objects
      */
-    private HashMap<String, Element> objectEmbedElements = new HashMap<>();
+    private final HashMap<String, Element> objectEmbedElements = new HashMap<>();
 
     /**
      * List of all embed fields
      */
-    private ArrayList<FieldElement> embedFields = new ArrayList<>();
+    private final ArrayList<FieldElement> embedFields = new ArrayList<>();
 
     /**
      * Set the title of the embed
