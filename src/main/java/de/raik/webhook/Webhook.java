@@ -53,6 +53,7 @@ public class Webhook {
         try {
             HttpURLConnection httpConnection = (HttpURLConnection) new URL(this.url).openConnection();
             httpConnection.setRequestProperty("Content-Type", "application/json");
+            httpConnection.setRequestProperty("User-Agent", "java 8 HttpURLConnection");
             httpConnection.setDoOutput(true);
             httpConnection.setRequestMethod("POST");
 
