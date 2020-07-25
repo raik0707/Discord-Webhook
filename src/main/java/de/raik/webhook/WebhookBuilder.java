@@ -144,8 +144,13 @@ public class WebhookBuilder {
      * @see Webhook
      *
      * @return The Webhook which was created
+     *          return null on not buildable webhook
      */
     public Webhook build() {
+        //Cancelling if not buildable
+        if (!this.isBuildable())
+            return null;
+
         // Creating json payload
         JsonObject payload = new JsonObject();
 
@@ -171,5 +176,17 @@ public class WebhookBuilder {
 
         //Returning new webhook
         return new Webhook(this.url, payload);
+    }
+
+    /**
+     * Check if the builder can build the webhook
+     * Not buildable if content and embed is empty
+     *
+     * Also not buildable if url is none
+     *
+     * @return The value if it is buildable
+     */
+    private boolean isBuildable() {
+        return (this.content != null || !this.embeds.isEmpty()) && this.url != null;
     }
 }
