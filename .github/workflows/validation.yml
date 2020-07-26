@@ -1,0 +1,12 @@
+name: Source validation
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    name: Build and Test Running
+    runs-on: ubuntu-latest
+    steps:
+      # Executes test and builds
+      - name: Gradle build
+        run: ./gradlew build
