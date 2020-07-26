@@ -6,6 +6,8 @@ jobs:
   build:
     name: Build and Test Running
     runs-on: ubuntu-latest
+
+    # Executing the job.
     steps:
       # Copy repository
       - uses: actions/checkout@v2
