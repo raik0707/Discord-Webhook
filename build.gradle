@@ -3,7 +3,7 @@ plugins {
 }
 
 group 'de.raik'
-version '1.0-SNAPSHOT'
+version project.hasProperty("library.version") ? project.findProperty("library.version") : 'HEAD-SNAPSHOT'
 
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
