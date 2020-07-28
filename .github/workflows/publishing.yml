@@ -7,9 +7,20 @@ on:
       - v*
 
 jobs:
+  # Get artifact version
+  reformat-artifact-tag:
+    name: Tage Name reformatting
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Tag Name reformating
+        id: tag-reformat
+        run: echo "::set-output name=artifact-version::$(cut -d'v' -f2- <<< '$cut -d'/' -f3- <<< '${{ github.ref }}'' | tr '[:lower:]' '[:upper:]')"
+
   # Publish package to artifact hosts
   artifact-publish:
     name: Artifact Publish
+    needs: reformat-artifact-tag
     runs-on: ubuntu-latest
 
     #Executing the job
@@ -27,4 +38,29 @@ jobs:
 
       # Execute gradle publishing
       - name: Gradle publish
-        run: ./gradlew publish
+        run: ./gradlew publish -Plibrary.version=${{ needs.reformat-artifact-tag.outputs.artifact-version }}
+
+  github-package-publish:
+    name: Package Publish
+    needs: reformat-artifact-tag
+    runs-on: ubuntu-latest
+
+    steps:
+      # Copy repository
+      - uses: actions/checkout@v2
+      # Setup jdk
+      - name: Setup jdk 1.8
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+
+      - name: Add execute permission
+        run: chmod +x ./gradlew
+
+      # TODO: Create release
+
+      # Building jar for publishing as artifact
+      - name: Gradle build jar file
+        run: ./gradlew assemble -Plibrary.version=${{ needs.reformat-artifact-tag.outputs.artifact-version }}
+
+      # TODO: Attach asset

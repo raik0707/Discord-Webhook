@@ -5,6 +5,8 @@ plugins {
 group 'de.raik'
 version project.hasProperty("library.version") ? project.findProperty("library.version") : 'HEAD-SNAPSHOT'
 
+//TODO: Implement publishing
+
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
