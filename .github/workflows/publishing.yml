@@ -8,19 +8,19 @@ on:
 
 jobs:
   # Get artifact version
-  reformat-artifact-tag:
+  reformat_artifact_tag:
     name: Tage Name reformatting
     runs-on: ubuntu-latest
 
     steps:
       - name: Tag Name reformating
-        id: tag-reformat
+        id: tag_reformat
         run: echo "::set-output name=artifact-version::$(cut -d'v' -f2- <<< '$cut -d'/' -f3- <<< '${{ github.ref }}'' | tr '[:lower:]' '[:upper:]')"
 
   # Publish package to artifact hosts
   artifact-publish:
     name: Artifact Publish
-    needs: reformat-artifact-tag
+    needs: reformat_artifact_tag
     runs-on: ubuntu-latest
 
     #Executing the job
@@ -38,11 +38,11 @@ jobs:
 
       # Execute gradle publishing
       - name: Gradle publish
-        run: ./gradlew publish -Plibrary.version=${{ needs.reformat-artifact-tag.outputs.artifact-version }}
+        run: ./gradlew publish -Plibrary.version=${{ needs.reformat_artifact_tag.outputs.artifact-version }}
 
   github-package-publish:
     name: Package Publish
-    needs: reformat-artifact-tag
+    needs: reformat_artifact_tag
     runs-on: ubuntu-latest
 
     steps:
@@ -57,10 +57,31 @@ jobs:
       - name: Add execute permission
         run: chmod +x ./gradlew
 
-      # TODO: Create release
+      - name: Create Github Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: ${{ github.ref }}
+          draft: true
 
       # Building jar for publishing as artifact
       - name: Gradle build jar file
-        run: ./gradlew assemble -Plibrary.version=${{ needs.reformat-artifact-tag.outputs.artifact-version }}
+        run: ./gradlew assemble -Plibrary.version=${{ needs.reformat_artifact_tag.outputs.artifact-version }}
 
-      # TODO: Attach asset
+      - name: Get binary file name
+        id: get_binary_name
+        # Get only first binary in libs
+        run: echo "::set-output name=binary_name::$(ls ./build/libs/*-${{ needs.reformat_artifact_tag.outputs.artifact-version }}.jar | head -1 | cut -d'/' -f4-)"
+
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./build/libs/${{ steps.get_binary_name.outputs.binary_name }}
+          asset_name: ${{ steps.get_binary_name.outputs.binary_name }}
+          asset_content_type: application/jar
