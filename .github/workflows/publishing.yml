@@ -38,7 +38,7 @@ jobs:
 
       # Execute gradle publishing
       - name: Gradle publish
-        run: ./gradlew publish -Plibrary.version=${{ needs.reformat_artifact_tag.outputs.artifact-version }}
+        run: ./gradlew publish -Plibrary.version=${{ needs.reformat_artifact_tag.outputs.artifact-version }} -Pmaven.username=${{ secrets.MAVEN_USER }} -Pmaven.password=${{ secrets.MAVEN_PASSWORD }} -Pgithub.actor=${{ env.GITHUB_ACTOR }} $github.token=${{ secrets.GITHUB_TOKEN }}
 
   github-package-publish:
     name: Package Publish

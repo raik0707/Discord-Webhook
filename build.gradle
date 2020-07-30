@@ -1,11 +1,11 @@
 plugins {
     id 'java-library'
+    id 'maven-publish'
 }
 
-group 'de.raik'
+group 'io.github.mineflash07 '
 version project.hasProperty("library.version") ? project.findProperty("library.version") : 'HEAD-SNAPSHOT'
 
-//TODO: Implement publishing
 
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
@@ -22,4 +22,63 @@ dependencies {
     api 'com.google.code.gson:gson:2.8.6'
 
     testImplementation group: 'junit', name: 'junit', version: '4.12'
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifactId = 'discord-webhook'
+
+            from components.java
+            pom {
+                name = project.getName()
+                description = "Discord Webhook sending library"
+                url = "https://github.com/MineFlash07/Discord-Webhook"
+
+                issueManagement {
+                    system = "GitHub"
+                    url = "https://github.com/MineFlash07/Discord-Webhook/issues"
+                }
+
+                licenses {
+                    license {
+                        name = "MIT"
+                        url = "https://github.com/MineFlash07/Discord-Webhook/blob/master/LICENSE.md"
+                    }
+                }
+
+                scm {
+                    url = "https://github.com/MineFlash07/Discord-Webhook"
+                    connection = "scm:git:git://github.com/MineFlash07/Discord-Webhook.git"
+                    developerConnection = "scm:git:ssh://github.com/MineFlash07/Discord-Webhook.git"
+                }
+
+                developers {
+                    developer {
+                        id = "raik"
+                        name = "Raik"
+                        email = "mineflash07@gmail.com"
+                    }
+                }
+            }
+        }
+    }
+    repositories {
+        maven {
+            name = "MavenCentral"
+            url = version.endsWith('SNAPSHOT') ? "https://oss.sonatype.org/content/repositories/snapshots/" : "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+            credentials {
+                username = project.findProperty("maven.username")
+                password = project.findProperty("maven.password")
+            }
+        }
+        maven {
+            name = "GithubMavenPackage"
+            url = "https://maven.pkg.github.com/mineFlash07/discord-Webhook"
+            credentials {
+                username = project.findProperty("github.actor")
+                password = project.findProperty("github.token")
+            }
+        }
+    }
 }
