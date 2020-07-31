@@ -79,7 +79,7 @@ jobs:
         id: get_binary_name
         # Get only first binary in libs and reformatted name
         run: |
-          file_name = ls ./build/libs/*-${{ needs.reformat_artifact_tag.outputs.artifact-version }}.jar | head -1 | cut -d'/' -f4-
+          file_name="$(ls ./build/libs/*-${{ needs.reformat_artifact_tag.outputs.artifact-version }}.jar | head -1 | cut -d'/' -f4-)"
           echo "::set-output name=binary_name::$file_name"
           echo "::set-output name=reformatted_name::$(tr ' ' '-' <<< $file_name)"
 
