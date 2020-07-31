@@ -15,7 +15,9 @@ jobs:
     steps:
       - name: Tag Name reformating
         id: tag_reformat
-        run: echo "::set-output name=artifact-version::$(cut -d'v' -f2- <<< '$cut -d'/' -f3- <<< '${{ github.ref }}'' | tr '[:lower:]' '[:upper:]')"
+        run: |
+          echo "::set-output name=artifact-version::$(cut -d'v' -f2- <<< '$cut -d'/' -f3- <<< '${{ github.ref }}'' | tr '[:lower:]' '[:upper:]')"
+          echo "Test $(cut -d'v' -f2- <<< '$cut -d'/' -f3- <<< '${{ github.ref }}'' | tr '[:lower:]' '[:upper:]')"
 
   # Publish package to artifact hosts
   artifact-publish:
