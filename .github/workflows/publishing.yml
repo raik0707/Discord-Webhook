@@ -45,7 +45,7 @@ jobs:
 
       # Execute gradle publishing
       - name: Gradle publish
-        run: ./gradlew publish -Plibrary.version=${{ needs.reformat_artifact_tag.outputs.artifact-version }} -Pmaven.username=${{ secrets.MAVEN_USER }} -Pmaven.password=${{ secrets.MAVEN_PASSWORD }} -Pgithub.actor=${{ env.GITHUB_ACTOR }} $github.token=${{ secrets.GITHUB_TOKEN }}
+        run: ./gradlew publish -Plibrary.version=${{ needs.reformat_artifact_tag.outputs.artifact-version }} -Pmaven.username=${{ secrets.MAVEN_USER }} -Pmaven.password=${{ secrets.MAVEN_PASSWORD }} -Pgithub.actor=$GITHUB_ACTOR -Pgithub.token=${{ secrets.GITHUB_TOKEN }}
 
   github-package-publish:
     name: Package Publish
@@ -82,15 +82,6 @@ jobs:
         id: get_binary_name
         # Get only first binary in libs
         run: echo "::set-output name=binary_name::$(ls ./build/libs/*-${{ needs.reformat_artifact_tag.outputs.artifact-version }}.jar | head -1 | cut -d'/' -f4-)"
-
-      - name: Echo tokens
-        run: |
-          echo "Test ${{ steps.get_binary_name.outputs.binary_name }}" > test1.txt
-          cat test1.txt
-          ls ./build/libs/
-          echo "Test ${{ needs.reformat_artifact_tag.outputs.artifact-version }}" > test2.txt
-          cat test2.txt
-          echo "Test ${{ needs.reformat_artifact_tag.outputs.test }}"
 
       - name: Upload Release Asset
         uses: actions/upload-release-asset@v1
