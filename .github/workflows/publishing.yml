@@ -80,9 +80,11 @@ jobs:
 
       - name: Echo tokens
         run: |
-          echo "Test ${{ steps.get_binary_name.outputs.binary_name }}"
+          echo "Test ${{ steps.get_binary_name.outputs.binary_name }}" > test1.txt
+          cat test1.txt
           ls ./build/libs/
-          echo "Test ${{ needs.reformat_artifact_tag.outputs.artifact-version }}"
+          echo "Test ${{ needs.reformat_artifact_tag.outputs.artifact-version }}" > test2.txt
+          cat test2.txt
 
       - name: Upload Release Asset
         uses: actions/upload-release-asset@v1
