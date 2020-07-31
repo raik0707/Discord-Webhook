@@ -90,7 +90,7 @@ jobs:
           ls ./build/libs/
           echo "Test ${{ needs.reformat_artifact_tag.outputs.artifact-version }}" > test2.txt
           cat test2.txt
-          echo "Test ${{ needs.reformat_artifact_tag.outputs.test }}
+          echo "Test ${{ needs.reformat_artifact_tag.outputs.test }}"
 
       - name: Upload Release Asset
         uses: actions/upload-release-asset@v1
