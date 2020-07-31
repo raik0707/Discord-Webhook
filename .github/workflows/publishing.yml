@@ -21,7 +21,7 @@ jobs:
         id: tag_reformat
         run: |
           echo "::set-output name=artifact-version::$(cut -d'v' -f2- <<< '$cut -d'/' -f3- <<< '${{ github.ref }}'' | tr '[:lower:]' '[:upper:]')"
-          echo "::set-output name=test::Help me
+          echo "::set-output name=test::Help me"
           echo "Test $(cut -d'v' -f2- <<< '$cut -d'/' -f3- <<< '${{ github.ref }}'' | tr '[:lower:]' '[:upper:]')"
 
   # Publish package to artifact hosts
