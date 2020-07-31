@@ -13,16 +13,12 @@ jobs:
     runs-on: ubuntu-latest
 
     outputs:
-      test: ${{ steps.tag_reformat.outputs.test }}
       artifact-version: ${{ steps.tag_reformat.outputs.artifact-version }}
 
     steps:
       - name: Tag Name reformating
         id: tag_reformat
-        run: |
-          echo "::set-output name=artifact-version::$(cut -d'v' -f2- <<< '$cut -d'/' -f3- <<< '${{ github.ref }}'' | tr '[:lower:]' '[:upper:]')"
-          echo "::set-output name=test::Help me"
-          echo "Test $(cut -d'v' -f2- <<< '$cut -d'/' -f3- <<< '${{ github.ref }}'' | tr '[:lower:]' '[:upper:]')"
+        run: echo "::set-output name=artifact-version::$(cut -d'v' -f2- <<< '$cut -d'/' -f3- <<< '${{ github.ref }}'' | tr '[:lower:]' '[:upper:]')"
 
   # Publish package to artifact hosts
   artifact-publish:
@@ -78,10 +74,14 @@ jobs:
       - name: Gradle build jar file
         run: ./gradlew assemble -Plibrary.version=${{ needs.reformat_artifact_tag.outputs.artifact-version }}
 
+      # Get binary name and output name with -
       - name: Get binary file name
         id: get_binary_name
-        # Get only first binary in libs
-        run: echo "::set-output name=binary_name::$(ls ./build/libs/*-${{ needs.reformat_artifact_tag.outputs.artifact-version }}.jar | head -1 | cut -d'/' -f4-)"
+        # Get only first binary in libs and reformatted name
+        run: |
+          file_name = ls ./build/libs/*-${{ needs.reformat_artifact_tag.outputs.artifact-version }}.jar | head -1 | cut -d'/' -f4-
+          echo "::set-output name=binary_name::$file_name"
+          echo "::set-output name=reformatted_name::$(tr ' ' '-' <<< $file_name)"
 
       - name: Upload Release Asset
         uses: actions/upload-release-asset@v1
@@ -90,5 +90,11 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./build/libs/${{ steps.get_binary_name.outputs.binary_name }}
-          asset_name: ${{ steps.get_binary_name.outputs.binary_name }}
+          asset_name: ${{ steps.get_binary_name.outputs.reformatted_name }}
           asset_content_type: application/jar
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ steps.get_binary_name.outputs.reformatted_name }}
+          path: ./build/libs/${{ steps.get_binary_name.outputs.binary_name }}

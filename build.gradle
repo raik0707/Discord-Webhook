@@ -3,7 +3,7 @@ plugins {
     id 'maven-publish'
 }
 
-group 'io.github.mineflash07 '
+group 'io.github.mineflash07'
 version project.hasProperty("library.version") ? project.findProperty("library.version") : 'HEAD-SNAPSHOT'
 
 
