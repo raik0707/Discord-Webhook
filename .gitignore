@@ -5,3 +5,6 @@
 #Gradle
 .gradle/
 build/
+
+#Gpg
+gpg-key.key
