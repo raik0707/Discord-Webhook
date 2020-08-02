@@ -40,7 +40,7 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: Create key field
-        run: base64 --decode > secring.gpg <<< ${{ secrets.GPG_FILE_BASE64 }}
+        run: base64 --decode <<< '${{ secrets.GPG_FILE_BASE64 }}' > secring.gpg
 
       # Execute gradle publishing
       - name: Gradle publish
